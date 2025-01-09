@@ -24,6 +24,31 @@ body{
     border-bottom-right-radius: 15%;
 }
 
+p{
+    font-family: 'Press Start 2P', cursive;  /* Police pixel art */
+    color: rgb(56, 56, 56);; /* Couleur noire, avec une légère nuance pour un effet plus doux */
+    font-size: 10px; /* Taille de la police (à ajuster selon tes besoins) */
+    font-weight: 400; /* Poids normal de la police */
+    line-height: 1.5; /* Hauteur de ligne pour aérer un peu le texte */
+}
+
+#exp {
+    position: relative;
+    width: 80%;
+    height: 10px;
+    background: #ddd;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+#exp .progress {
+    height: 100%;
+    width: 10%; /* La largeur changera en fonction de l'expérience */
+    background: linear-gradient(to right, #537692, #4b70a8); /* Dégradé bleu */
+    border-radius: 5px;
+    transition: width 0.3s ease; /* Animation pour rendre le changement fluide */
+}
+
 #status{
     font-family: 'Press Start 2P', cursive;  /* Police pixel art */
     color: rgb(56, 56, 56);; /* Couleur noire, avec une légère nuance pour un effet plus doux */
