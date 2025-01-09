@@ -1,3 +1,87 @@
+// Status
+const States = {
+  Normal: 1,
+  Happy: 2,
+  Sad: 7,
+  Angry: 4,
+  VeryHappy: 11,
+  Lost: 9
+};
+
+
+//////////////////////////////////////// EXP SECTION EXP
+
+let currentExp = 10;
+let maxExp = 100;
+let level = loadLevel();
+
+
+function saveExp(currentExp, maxExp) {
+  localStorage.setItem('currentExp', currentExp);
+  localStorage.setItem('maxExp', maxExp);
+  console.log("Expérience sauvegardée !");
+}
+
+function loadExp() {
+  const currentExp = parseInt(localStorage.getItem('currentExp')) || 0; // Par défaut 0 si rien dans le localStorage
+  const maxExp = parseInt(localStorage.getItem('maxExp')) || 100; // Par défaut 100 si rien dans le localStorage
+  console.log("Expérience chargée :", { currentExp, maxExp });
+  return { currentExp, maxExp };
+}
+
+
+function saveLevel(level) {
+  localStorage.setItem('level', level);
+  console.log("Level saved:", level);
+}
+
+function loadLevel() {
+  const savedLevel = localStorage.getItem('level');
+  if (savedLevel !== null) {
+      return parseInt(savedLevel, 10); // Convertir en nombre
+  }
+  return 1; // Niveau par défaut si rien n'est sauvegardé
+}
+
+function saveState(state) {
+  localStorage.setItem('state', state);
+  console.log("State saved:", state);
+}
+
+function loadState() {
+  const savedState = localStorage.getItem('state');
+  if (savedState !== null) {
+      return parseInt(savedState, 10); // Convertir en entier
+  }
+  return States.Normal; // Valeur par défaut si aucun état n'est sauvegardé
+}
+
+
+let state = loadState();
+const expData = loadExp();
+currentExp = expData.currentExp;
+maxExp = expData.maxExp
+updateExpBar(0); // to initalize the lvl
+
+
+
+
+////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Sélectionner le canvas et configurer son contexte
 const canvas = document.getElementById('animationCanvas');
 const ctx = canvas.getContext('2d');
@@ -6,7 +90,7 @@ const backgroundImage = new Image();
 backgroundImage.src = 'background2.png';
 
 //toutes les 10 secondes ou apres chaque action le status est changer
-let status = 1; // 1 = Idle Normal, 2 = .. à définir
+
 
 
 // Variables globales
@@ -175,6 +259,102 @@ imgPP.onload = function() {
     displayPortrait(1);  // Afficher le portrait numéro 1
 } 
 
-setTimeout(function() {
-    displayPortrait(1);  // Afficher le portrait numéro 3 après 5 secondes
-  }, 2000);
+
+
+
+
+
+
+
+
+
+
+
+function updateExpBar(exp) {
+  currentExp += exp; // Ajoute l'expérience gagnée
+  if (currentExp >= maxExp) {
+      levelUp();
+  }
+  const progressPercent = (currentExp / maxExp) * 100; // Calcule le pourcentage
+  const progressBar = document.querySelector('#exp .progress');
+  progressBar.style.width = progressPercent + '%'; // Modifie la largeur
+
+  document.getElementById('lvl').textContent = `Lvl: ${level}`;
+
+}
+
+function levelUp() {
+  currentExp = currentExp - maxExp; // Réinitialise l'expérience pour le nouveau niveau
+  maxExp += 50; // Augmente la limite d'expérience pour le prochain niveau
+  level += 1;
+  document.getElementById('lvl').textContent = `Lvl: ${level}`; // Augmente le niveau
+}
+
+////////////////////////////////////
+
+
+
+
+
+document.getElementById('FeedButton').addEventListener('click', () => {
+  state = States.VeryHappy;
+  displayPortrait(state);
+});
+
+document.getElementById('PunchButton').addEventListener('click', () => {
+  state = States.Angry;
+  displayPortrait(state);
+  currentExp = 0;
+  updateExpBar(0);
+});
+
+document.getElementById('PetButton').addEventListener('click', () => {
+  if(state != States.VeryHappy){
+    state = States.Happy;
+    displayPortrait(state);
+  }
+  updateExpBar(5);
+});
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////
+
+let previousExp = null;
+let previousMaxExp = null;
+let previousLvl = null;
+let prevousSaveState = null;
+
+function repeatEverySecond() {
+
+  displayPortrait(state);
+
+  //exp save
+  if (currentExp !== previousExp || maxExp !== previousMaxExp) {
+    saveExp(currentExp, maxExp);
+    previousExp = currentExp;
+    previousMaxExp = maxExp;
+  }
+  if (level !== previousLvl) {
+    saveLevel(level);
+    previousLvl = level;
+  }
+  if (state !== prevousSaveState) {
+    saveState(state);
+    prevousSaveState = state;
+  }
+
+
+
+}
+
+
+setInterval(repeatEverySecond, 1000);

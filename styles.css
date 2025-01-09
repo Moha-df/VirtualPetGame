@@ -92,10 +92,17 @@ p{
     align-items: center;
 }
 
-button{
+button {
     all: unset;
     padding: 10px;
     background: linear-gradient(to bottom right, #3df5c7, rgb(182, 196, 100));
     border: 2px solid rgb(156, 156, 156);
     margin: 0 5px;
+    transition: transform 0.01s, background-color 0.01s;
+}
+
+button:active {
+    background: linear-gradient(to bottom right, #1bbf91, rgb(150, 170, 80));
+    border-color: rgb(120, 120, 120);
+    transform: scale(0.95); /* Réduit légèrement le bouton pour un effet de clic */
 }
